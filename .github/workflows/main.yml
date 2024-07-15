@@ -1,39 +1,19 @@
-name: Slither-Test
-
-on:
-  workflow_call:
+ame: solidity-unit-testing-action
+on: [push]
 
 jobs:
-  Slither-Test:
+  run_sample_test_job:
     runs-on: ubuntu-latest
+    name: A job to run sample solidity tests
     steps:
-      - name: Checkout code from caller repo
-        uses: actions/checkout@v4
-
-      - name: Checkout solidity workflows repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Environment Setup
+        uses: actions/setup-node@v3
         with:
-          repository: The-Poolz/solidity-workflows
-          ref: master
-          path: solidity-workflows
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+          node-version: 20.12.2
+      - name: Run SUT action with default provider
+        uses: EthereumRemix/sol-test@v1.2
         with:
-          node-version: 20.9.0
-
-      - name: Restore node modules cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Run Slither
-        uses: crytic/slither-action@v0.4.0
-        id: slither
-        with:
-          node-version: 20.9.0
-          fail-on: high
-          slither-args: --checklist --markdown-root ${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/
+          test-path: 'tests/Voting_test.sol'
+          compiler-version: '0.8.20'
