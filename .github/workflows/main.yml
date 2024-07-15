@@ -1,4 +1,4 @@
-ame: solidity-unit-testing-action
+name: solidity-unit-testing-action
 on: [push]
 
 jobs:
